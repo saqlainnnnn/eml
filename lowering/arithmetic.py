@@ -211,3 +211,238 @@ def average_eml(x, y):
     node.origin = f"avg({x.origin}, {y.origin})"
 
     return node
+
+def i_eml():
+
+    node = exp_eml(
+
+        divide_eml(
+
+            log_eml(
+                minus_eml(
+                    const(1)
+                )
+            ),
+
+            const(2)
+        )
+    )
+
+    node.label = "imaginary"
+
+    node.origin = "i"
+
+    return node
+
+def cosh_eml(x):
+
+    node = half_eml(
+
+        plus_eml(
+
+            exp_eml(x),
+
+            exp_eml(
+                minus_eml(x)
+            )
+        )
+    )
+
+    node.label = "cosh"
+
+    node.origin = f"cosh({x.origin})"
+
+    return node
+
+def sinh_eml(x):
+
+    node = half_eml(
+
+        subtract_eml(
+
+            exp_eml(x),
+
+            exp_eml(
+                minus_eml(x)
+            )
+        )
+    )
+
+    node.label = "sinh"
+
+    node.origin = f"sinh({x.origin})"
+
+    return node
+
+
+def tanh_eml(x):
+
+    node = divide_eml(
+
+        sinh_eml(x),
+
+        cosh_eml(x)
+    )
+
+    node.label = "tanh"
+
+    node.origin = f"tanh({x.origin})"
+
+    return node
+
+def cos_eml(x):
+
+    node = cosh_eml(
+
+        divide_eml(
+
+            x,
+
+            i_eml()
+        )
+    )
+
+    node.label = "cos"
+
+    node.origin = f"cos({x.origin})"
+
+    return node
+
+def pi_eml():
+
+    node = divide_eml(
+
+        log_eml(
+            minus_eml(
+                const(1)
+            )
+        ),
+
+        i_eml()
+    )
+
+    node.label = "pi"
+
+    node.origin = "pi"
+
+    return node
+
+def sin_eml(x):
+
+    node = cos_eml(
+
+        subtract_eml(
+
+            x,
+
+            half_eml(
+                pi_eml()
+            )
+        )
+    )
+
+    node.label = "sin"
+
+    node.origin = f"sin({x.origin})"
+
+    return node
+
+def tan_eml(x):
+
+    node = divide_eml(
+
+        sin_eml(x),
+
+        cos_eml(x)
+    )
+
+    node.label = "tan"
+
+    node.origin = f"tan({x.origin})"
+
+    return node
+
+def arsinh_eml(x):
+
+    node = log_eml(
+
+        plus_eml(
+
+            x,
+
+            sqrt_eml(
+
+                plus_eml(
+
+                    const(1),
+
+                    power_eml(
+                        x,
+                        const(2)
+                    )
+                )
+            )
+        )
+    )
+
+    node.label = "arsinh"
+
+    node.origin = f"arsinh({x.origin})"
+
+    return node
+
+def arcosh_eml(x):
+
+    node = log_eml(
+
+        plus_eml(
+
+            x,
+
+            sqrt_eml(
+
+                subtract_eml(
+
+                    power_eml(
+                        x,
+                        const(2)
+                    ),
+
+                    const(1)
+                )
+            )
+        )
+    )
+
+    node.label = "arcosh"
+
+    node.origin = f"arcosh({x.origin})"
+
+    return node
+
+def arctanh_eml(x):
+
+    node = half_eml(
+
+        log_eml(
+
+            divide_eml(
+
+                plus_eml(
+                    const(1),
+                    x
+                ),
+
+                subtract_eml(
+                    const(1),
+                    x
+                )
+            )
+        )
+    )
+
+    node.label = "arctanh"
+
+    node.origin = f"arctanh({x.origin})"
+
+    return node

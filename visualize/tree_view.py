@@ -19,16 +19,16 @@ def build_label(node):
 
     parts = []
 
-    # structural node colors
+    # neon structural colors
     op_colors = {
-        "EML": "bold cyan",
-        "CONST": "bold yellow",
-        "VAR": "bold green"
+        "EML": "bold bright_cyan",
+        "CONST": "bold bright_yellow",
+        "VAR": "bold bright_green"
     }
 
     op_style = op_colors.get(
         node.op,
-        "bold white"
+        "bold bright_white"
     )
 
     # operation name
@@ -38,12 +38,12 @@ def build_label(node):
         f"[/{op_style}]"
     )
 
-    # node id
+    # neon node ids
     parts.append(
-        f"[dim white][{node.id}][/dim white]"
+        f"[bright_white][{node.id}][/bright_white]"
     )
 
-    # semantic operation family colors
+    # semantic operation families
     semantic_colors = {
 
         # arithmetic
@@ -53,10 +53,12 @@ def build_label(node):
         "divide": "black on bright_green",
         "negate": "black on bright_green",
         "power": "black on bright_green",
+        "half": "black on bright_green",
+        "average": "black on bright_green",
 
         # logarithmic / exponential
-        "log": "black on magenta",
-        "exp": "black on magenta",
+        "log": "black on bright_magenta",
+        "exp": "black on bright_magenta",
 
         # trigonometric
         "sin": "black on bright_blue",
@@ -64,17 +66,23 @@ def build_label(node):
         "tan": "black on bright_blue",
 
         # hyperbolic
-        "sinh": "black on cyan",
-        "cosh": "black on cyan",
-        "tanh": "black on cyan",
+        "sinh": "black on bright_cyan",
+        "cosh": "black on bright_cyan",
+        "tanh": "black on bright_cyan",
 
         # inverse trig
         "arcsin": "black on bright_red",
         "arccos": "black on bright_red",
-        "arctan": "black on bright_red"
+        "arctan": "black on bright_red",
+
+        # complex
+        "imaginary": "black on bright_yellow",
+
+        # roots
+        "sqrt": "black on bright_white"
     }
 
-    # semantic label
+    # semantic label box
     if node.label:
 
         semantic_style = semantic_colors.get(
@@ -95,15 +103,15 @@ def build_label(node):
 
         if node.op == "CONST":
 
-            value_style = "bold yellow"
+            value_style = "bold bright_blue"
 
         elif node.op == "VAR":
 
-            value_style = "bold green"
+            value_style = "bold bright_green"
 
         else:
 
-            value_style = "bold white"
+            value_style = "bold bright_white"
 
         parts.append(
             f"[{value_style}]"
@@ -115,9 +123,9 @@ def build_label(node):
     if node.origin:
 
         parts.append(
-            f"[green]"
+            f"[bright_green]"
             f"{truncate(node.origin)}"
-            f"[/green]"
+            f"[/bright_green]"
         )
 
     return " ".join(parts)

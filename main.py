@@ -3,8 +3,7 @@ from visualize.tree_view import show
 
 
 x = var("x")
-y = var("y")
 
-tree = average_eml(x, y)
+tree = arctanh_eml(x)
 
 show(tree)
