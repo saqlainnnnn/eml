@@ -12,6 +12,9 @@ class Node:
 
     value: Optional[str] = None
 
+    label: Optional[str] = None
+    origin: Optional[str] = None
+
     id: str = field(
         default_factory=lambda: str(uuid.uuid4())[:8]
     )
