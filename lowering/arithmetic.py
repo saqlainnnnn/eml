@@ -109,3 +109,105 @@ def plus_eml(x, y):
     node.origin = f"({x.origin} + {y.origin})"
 
     return node
+
+def multiply_eml(x, y):
+
+    node = exp_eml(
+
+        plus_eml(
+
+            log_eml(x),
+
+            log_eml(y)
+        )
+    )
+
+    node.label = "multiply"
+
+    node.origin = f"({x.origin} * {y.origin})"
+
+    return node
+
+def inverse_eml(x):
+
+    node = exp_eml(
+
+        minus_eml(
+
+            log_eml(x)
+        )
+    )
+
+    node.label = "inverse"
+
+    node.origin = f"(1 / {x.origin})"
+
+    return node
+
+
+def divide_eml(x, y):
+
+    node = multiply_eml( x,inverse_eml(y))
+
+    node.label = "divide"
+
+    node.origin = f"({x.origin} / {y.origin})"
+
+    return node
+
+def power_eml(x, y):
+
+    node = exp_eml(multiply_eml(y,log_eml(x)))
+
+    node.label = "power"
+
+    node.origin = f"({x.origin} ^ {y.origin})"
+
+    return node
+
+def sqrt_eml(x):
+
+    node = exp_eml(
+
+        divide_eml(
+
+            log_eml(x),
+
+            const(2)
+        )
+    )
+
+    node.label = "sqrt"
+
+    node.origin = f"sqrt({x.origin})"
+
+    return node
+
+def half_eml(x):
+
+    node = divide_eml(
+
+        x,
+
+        const(2)
+    )
+
+    node.label = "half"
+
+    node.origin = f"({x.origin} / 2)"
+
+    return node
+
+
+def average_eml(x, y):
+
+    node = half_eml(
+
+        plus_eml(x, y)
+    )
+
+    node.label = "average"
+
+    node.origin = f"avg({x.origin}, {y.origin})"
+
+    return node
