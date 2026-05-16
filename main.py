@@ -1,11 +1,11 @@
-from sympy import symbols, sin
+from sympy import symbols, log
 from lowering.lower import lower
 from visualize.tree_view import show
 
 
 x = symbols("x")
 
-expr = x**2 + sin(x)
+expr = log(x)
 
 tree = lower(expr)
 

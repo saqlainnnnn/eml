@@ -1,46 +1,29 @@
 from sympy import *
-from core.node import Node
+from lowering.arithmetic import *
 
 
 def lower(expr):
 
+    # constants
     if expr.is_Number:
-        return Node(op="CONST", value=str(expr))
+        return const(expr)
 
+    # variables
     if expr.is_Symbol:
-        return Node(op="VAR", value=str(expr))
+        return var(str(expr))
 
-    if isinstance(expr, Add):
-        args = expr.args
-
-        return Node(
-            op="ADD",
-            left=lower(args[0]),
-            right=lower(args[1])
+    # logarithm
+    if expr.func == log:
+        return log_eml(
+            lower(expr.args[0])
         )
 
-    if isinstance(expr, Mul):
-        args = expr.args
-
-        return Node(
-            op="MUL",
-            left=lower(args[0]),
-            right=lower(args[1])
+    # exponential
+    if expr.func == exp:
+        return exp_eml(
+            lower(expr.args[0])
         )
 
-    if isinstance(expr, Pow):
-
-        return Node(
-            op="POW",
-            left=lower(expr.base),
-            right=lower(expr.exp)
-        )
-
-    if expr.func == sin:
-
-        return Node(
-            op="SIN",
-            left=lower(expr.args[0])
-        )
-
-    raise NotImplementedError(f"Unsupported expression: {expr}")
+    raise NotImplementedError(
+        f"Unsupported expression: {expr}"
+    )
