@@ -4,7 +4,7 @@ from rich import print
 
 def build_tree(node):
 
-    label = node.op
+    label = f"{node.op} [{node.id}]"
 
     if node.value:
         label += f": {node.value}"
