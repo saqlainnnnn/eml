@@ -10,6 +10,8 @@ def const(value):
 
     node.origin = str(value)
 
+    node.compute_hash()
+
     return node
 
 
@@ -22,6 +24,8 @@ def var(name):
 
     node.origin = name
 
+    node.compute_hash()
+
     return node
 
 
@@ -33,8 +37,9 @@ def eml(left, right):
         right=right
     )
 
-    return node
+    node.compute_hash()
 
+    return node
 
 def exp_eml(x):
 

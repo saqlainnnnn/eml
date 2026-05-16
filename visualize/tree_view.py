@@ -40,7 +40,13 @@ def build_label(node):
 
     # neon node ids
     parts.append(
-        f"[bright_white][{node.id}][/bright_white]"
+    f"[white][{node.id}][/white]"
+)
+
+    if node.hash:
+
+        parts.append(
+            f"[dim cyan]{node.hash}[/dim cyan]"
     )
 
     # semantic operation families
