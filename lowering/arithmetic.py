@@ -1,45 +1,59 @@
 from core.node import Node
+from core.cache import NODE_CACHE
 
 
 def const(value):
 
-    node = Node(
+    temp = Node(
         op="CONST",
         value=str(value)
     )
 
-    node.origin = str(value)
+    temp.origin = str(value)
 
-    node.compute_hash()
+    temp.compute_hash()
 
-    return node
+    if temp.hash in NODE_CACHE:
+        return NODE_CACHE[temp.hash]
 
+    NODE_CACHE[temp.hash] = temp
+
+    return temp
 
 def var(name):
 
-    node = Node(
+    temp = Node(
         op="VAR",
         value=name
     )
 
-    node.origin = name
+    temp.origin = name
 
-    node.compute_hash()
+    temp.compute_hash()
 
-    return node
+    if temp.hash in NODE_CACHE:
+        return NODE_CACHE[temp.hash]
 
+    NODE_CACHE[temp.hash] = temp
+
+    return temp
 
 def eml(left, right):
 
-    node = Node(
+    temp = Node(
         op="EML",
         left=left,
         right=right
     )
 
-    node.compute_hash()
+    temp.compute_hash()
 
-    return node
+    if temp.hash in NODE_CACHE:
+        return NODE_CACHE[temp.hash]
+
+    NODE_CACHE[temp.hash] = temp
+
+    return temp
 
 def exp_eml(x):
 
