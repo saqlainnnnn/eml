@@ -1,12 +1,10 @@
-from sympy import symbols, log
-from lowering.lower import lower
+from lowering.arithmetic import *
 from visualize.tree_view import show
 
 
-x = symbols("x")
+x = var("x")
+y = var("y")
 
-expr = log(x)
-
-tree = lower(expr)
+tree = plus_eml(x, y)
 
 show(tree)

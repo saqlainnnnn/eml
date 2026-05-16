@@ -29,3 +29,13 @@ def exp_eml(x):
 
 def log_eml(x):
     return eml(const(1),exp_eml(eml(const(1),x)))
+
+def subtract_eml(x, y):
+    return eml(log_eml(x),exp_eml(y))
+
+def minus_eml(x):
+    return subtract_eml(const(1),x)
+
+
+def plus_eml(x, y):
+    return subtract_eml(x,minus_eml(y))
