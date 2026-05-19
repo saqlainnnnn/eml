@@ -1,6 +1,8 @@
 from core.node import Node
 from core.cache import NODE_CACHE
+
 from domains.predicate import *
+from domains.simplify import simplify_predicate
 
 
 def const(value):
@@ -96,8 +98,13 @@ def log_eml(x, semantic = True):
             x.constraints
         )
 
-        node.constraints.append(
+        constraint = simplify_predicate(
             gt(x, const(0))
+        )
+
+        if constraint is not True:
+            node.constraints.append(
+            constraint
         )
 
         dedup_constraints(node)
@@ -190,8 +197,14 @@ def inverse_eml(x, semantic=True):
             x.constraints
         )
 
-        node.constraints.append(
+        constraint = simplify_predicate(
             neq(x, const(0))
+            )
+
+        if constraint is not True:
+
+            node.constraints.append(
+            constraint
         )
 
         dedup_constraints(node)
@@ -226,9 +239,15 @@ def divide_eml(x, y, semantic=True):
             y.constraints
         )
 
-        node.constraints.append(
+        constraint = simplify_predicate(
             neq(y, const(0))
         )
+
+        if constraint is not True:
+
+            node.constraints.append(
+            constraint
+            )
 
         dedup_constraints(node)
 
@@ -250,8 +269,14 @@ def power_eml(x, y):
         y.constraints
     )
 
-    node.constraints.append(
+    constraint = simplify_predicate(
         gt(x, const(0))
+    )
+
+    if constraint is not True:
+
+        node.constraints.append(
+        constraint
     )
 
     return node
@@ -287,9 +312,15 @@ def sqrt_eml(x, semantic=True):
             x.constraints
         )
 
-        node.constraints.append(
+        constraint = simplify_predicate(
             gte(x, const(0))
         )
+
+        if constraint is not True:
+
+            node.constraints.append(
+            constraint
+            )
 
         dedup_constraints(node)
 
@@ -574,18 +605,17 @@ def arctanh_eml(x):
         x.constraints
     )
 
-    node.constraints.append(
+    constraint = simplify_predicate(
         gt(
             x,
             const(-1)
         )
     )
 
-    node.constraints.append(
-        lt(
-            x,
-            const(1)
-        )
+    if constraint is not True:
+
+        node.constraints.append(
+        constraint
     )
 
     dedup_constraints(node)

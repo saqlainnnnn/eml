@@ -127,7 +127,7 @@ def build_label(node):
         )
 
     # domains
-    if node.constraints:
+    if node.constraints and node.semantic:
 
         constraint_text = " ∧ ".join(
             render_constraint(c)
@@ -152,20 +152,42 @@ def build_label(node):
     return " ".join(parts)
 
 
-def build_tree(node):
+def build_tree(node, visited=None):
+
+    if visited is None:
+        visited = set()
+
+    # already rendered
+    if node.hash in visited:
+
+        return Tree(
+            f"[bold bright_yellow]"
+            f"REF[{node.id}]"
+            f"[/bold bright_yellow]"
+        )
+
+    visited.add(node.hash)
 
     tree = Tree(
         build_label(node)
     )
 
     if node.left:
+
         tree.add(
-            build_tree(node.left)
+            build_tree(
+                node.left,
+                visited
+            )
         )
 
     if node.right:
+
         tree.add(
-            build_tree(node.right)
+            build_tree(
+                node.right,
+                visited
+            )
         )
 
     return tree
