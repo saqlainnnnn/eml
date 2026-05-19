@@ -56,7 +56,7 @@ def eml(left, right):
 
     return temp
 
-def exp_eml(x):
+def exp_eml(x, semantic = False):
 
     node = eml(
         x,
@@ -67,10 +67,12 @@ def exp_eml(x):
 
     node.origin = f"exp({x.origin})"
 
+    node.semantic = semantic
+
     return node
 
 
-def log_eml(x):
+def log_eml(x, semantic = True):
 
     node = eml(
         const(1),
@@ -86,15 +88,19 @@ def log_eml(x):
 
     node.origin = f"log({x.origin})"
 
-    node.constraints.extend(
-        x.constraints
-    )
+    node.semantic = semantic
 
-    node.constraints.append(
-        gt(x, const(0))
-    )   
+    if semantic:
 
-    dedup_constraints(node)
+        node.constraints.extend(
+            x.constraints
+        )
+
+        node.constraints.append(
+            gt(x, const(0))
+        )
+
+        dedup_constraints(node)
 
     return node
 
@@ -158,54 +164,73 @@ def multiply_eml(x, y):
 
     return node
 
-def inverse_eml(x):
+def inverse_eml(x, semantic=True):
 
     node = exp_eml(
 
         minus_eml(
 
-            log_eml(x)
-        )
+            log_eml(
+                x,
+                semantic=False
+            )
+        ),
+        semantic=False
     )
 
     node.label = "inverse"
 
     node.origin = f"(1 / {x.origin})"
 
-    node.constraints.extend(
-        x.constraints
-    )
+    node.semantic = semantic
 
-    node.constraints.append(
-        neq(x, const(0))
-    )
+    if semantic:
 
-    dedup_constraints(node)
+        node.constraints.extend(
+            x.constraints
+        )
+
+        node.constraints.append(
+            neq(x, const(0))
+        )
+
+        dedup_constraints(node)
 
     return node
 
+def divide_eml(x, y, semantic=True):
 
-def divide_eml(x, y):
+    node = multiply_eml(
 
-    node = multiply_eml( x,inverse_eml(y))
+        x,
+
+        inverse_eml(
+            y,
+            semantic=False
+        )
+    )
 
     node.label = "divide"
 
     node.origin = f"({x.origin} / {y.origin})"
 
-    node.constraints.extend(
-        x.constraints
-    )
+    node.semantic = semantic
 
-    node.constraints.extend(
-        y.constraints
-    )
+    if semantic:
 
-    node.constraints.append(
-        neq(y, const(0))
-    )
+        node.constraints.extend(
+            x.constraints
+        )
 
-    dedup_constraints(node)
+        node.constraints.extend(
+            y.constraints
+        )
+
+        node.constraints.append(
+            neq(y, const(0))
+        )
+
+        dedup_constraints(node)
 
     return node
 
@@ -231,31 +256,42 @@ def power_eml(x, y):
 
     return node
 
-def sqrt_eml(x):
+def sqrt_eml(x, semantic=True):
 
     node = exp_eml(
 
         divide_eml(
 
-            log_eml(x),
+            log_eml(
+                x,
+                semantic=False
+            ),
 
-            const(2)
-        )
+            const(2),
+
+            semantic=False
+        ),
+
+        semantic=False
     )
 
     node.label = "sqrt"
 
     node.origin = f"sqrt({x.origin})"
 
-    node.constraints.extend(
-        x.constraints
-    )   
+    node.semantic = semantic
 
-    node.constraints.append(
-        gte(x, const(0))
-    )
+    if semantic:
 
-    dedup_constraints(node)
+        node.constraints.extend(
+            x.constraints
+        )
+
+        node.constraints.append(
+            gte(x, const(0))
+        )
+
+        dedup_constraints(node)
 
     return node
 
