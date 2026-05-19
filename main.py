@@ -3,12 +3,10 @@ from visualize.tree_view import show
 
 
 x = var("x")
-y = var("y")
 
-tree = sqrt_eml(
-    log_eml(
-        divide_eml(x, y)
-    )
+expr = divide_eml(
+    x,
+    x
 )
 
-show(tree)
+show(expr)

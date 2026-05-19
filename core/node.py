@@ -22,7 +22,9 @@ class Node:
 
     hash: Optional[str] = None
 
-    domains: list[str] = field(
+    semantic: bool = False
+
+    constraints: list["Node"] = field(
         default_factory=list
     )
 

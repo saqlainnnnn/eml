@@ -1,6 +1,6 @@
-#tree_view.py
 from rich.tree import Tree
 from rich import print
+from domains.render import render_constraint
 
 
 def truncate(text, limit=40):
@@ -127,15 +127,16 @@ def build_label(node):
         )
 
     # domains
-    if node.domains:
+    if node.constraints:
 
-        domain_text = " ∧ ".join(
-            node.domains
+        constraint_text = " ∧ ".join(
+            render_constraint(c)
+            for c in node.constraints
         )
 
         parts.append(
             f"[bright_red]"
-            f"{truncate(domain_text, 60)}"
+            f"{truncate(constraint_text, 60)}"
             f"[/bright_red]"
         )
 

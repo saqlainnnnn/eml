@@ -1,5 +1,6 @@
 from core.node import Node
 from core.cache import NODE_CACHE
+from domains.predicate import *
 
 
 def const(value):
@@ -85,17 +86,15 @@ def log_eml(x):
 
     node.origin = f"log({x.origin})"
 
-    node.domains.extend(
-        x.domains
+    node.constraints.extend(
+        x.constraints
     )
 
-    node.domains.append(
-        f"{x.origin} > 0"
-    )
+    node.constraints.append(
+        gt(x, const(0))
+    )   
 
-    node.domains = list(
-        set(node.domains)
-    )
+    dedup_constraints(node)
 
     return node
 
@@ -173,17 +172,15 @@ def inverse_eml(x):
 
     node.origin = f"(1 / {x.origin})"
 
-    node.domains.extend(
-        x.domains
+    node.constraints.extend(
+        x.constraints
     )
 
-    node.domains.append(
-        f"{x.origin} != 0"
+    node.constraints.append(
+        neq(x, const(0))
     )
 
-    node.domains = list(
-        set(node.domains)
-    )
+    dedup_constraints(node)
 
     return node
 
@@ -196,21 +193,19 @@ def divide_eml(x, y):
 
     node.origin = f"({x.origin} / {y.origin})"
 
-    node.domains.extend(
-        x.domains
+    node.constraints.extend(
+        x.constraints
     )
 
-    node.domains.extend(
-        y.domains
+    node.constraints.extend(
+        y.constraints
     )
 
-    node.domains.append(
-        f"{y.origin} != 0"
+    node.constraints.append(
+        neq(y, const(0))
     )
 
-    node.domains = list(
-        set(node.domains)
-    )
+    dedup_constraints(node)
 
     return node
 
@@ -222,20 +217,16 @@ def power_eml(x, y):
 
     node.origin = f"({x.origin} ^ {y.origin})"
 
-    node.domains.extend(
-        x.domains
+    node.constraints.extend(
+        x.constraints
     )
 
-    node.domains.extend(
-        y.domains
+    node.constraints.extend(
+        y.constraints
     )
 
-    node.domains.append(
-        f"{x.origin} > 0"
-    )
-
-    node.domains = list(
-        set(node.domains)
+    node.constraints.append(
+        gt(x, const(0))
     )
 
     return node
@@ -256,17 +247,15 @@ def sqrt_eml(x):
 
     node.origin = f"sqrt({x.origin})"
 
-    node.domains.extend(
-        x.domains
+    node.constraints.extend(
+        x.constraints
+    )   
+
+    node.constraints.append(
+        gte(x, const(0))
     )
 
-    node.domains.append(
-        f"{x.origin} >= 0"
-    )
-
-    node.domains = list(
-        set(node.domains)
-    )
+    dedup_constraints(node)
 
     return node
 
@@ -375,17 +364,18 @@ def tanh_eml(x):
 
     node.origin = f"tanh({x.origin})"
 
-    node.domains.extend(
-        x.domains
+    node.constraints.extend(
+        x.constraints
     )
 
-    node.domains.append(
-        f"cos({x.origin}) != 0"
+    node.constraints.append(
+        neq(
+            cos_eml(x),
+            const(0)
+        )
     )
 
-    node.domains = list(
-        set(node.domains)
-    )
+    dedup_constraints(node)
 
     return node
 
@@ -544,20 +534,35 @@ def arctanh_eml(x):
 
     node.origin = f"arctanh({x.origin})"
 
-    node.domains.extend(
-        x.domains
+    node.constraints.extend(
+        x.constraints
     )
 
-    node.domains.append(
-        f"{x.origin} > -1"
+    node.constraints.append(
+        gt(
+            x,
+            const(-1)
+        )
     )
 
-    node.domains.append(
-        f"{x.origin} < 1"
+    node.constraints.append(
+        lt(
+            x,
+            const(1)
+        )
     )
 
-    node.domains = list(
-        set(node.domains)
-)
+    dedup_constraints(node)
 
     return node
+
+def dedup_constraints(node):
+
+    unique = {}
+
+    for c in node.constraints:
+        unique[c.hash] = c
+
+    node.constraints = list(
+        unique.values()
+    )
