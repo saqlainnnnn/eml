@@ -3,7 +3,12 @@ from visualize.tree_view import show
 
 
 x = var("x")
+y = var("y")
 
-tree = arctanh_eml(x)
+tree = sqrt_eml(
+    log_eml(
+        divide_eml(x, y)
+    )
+)
 
 show(tree)

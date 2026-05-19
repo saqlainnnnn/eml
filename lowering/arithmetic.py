@@ -85,6 +85,18 @@ def log_eml(x):
 
     node.origin = f"log({x.origin})"
 
+    node.domains.extend(
+        x.domains
+    )
+
+    node.domains.append(
+        f"{x.origin} > 0"
+    )
+
+    node.domains = list(
+        set(node.domains)
+    )
+
     return node
 
 
@@ -161,6 +173,18 @@ def inverse_eml(x):
 
     node.origin = f"(1 / {x.origin})"
 
+    node.domains.extend(
+        x.domains
+    )
+
+    node.domains.append(
+        f"{x.origin} != 0"
+    )
+
+    node.domains = list(
+        set(node.domains)
+    )
+
     return node
 
 
@@ -172,6 +196,22 @@ def divide_eml(x, y):
 
     node.origin = f"({x.origin} / {y.origin})"
 
+    node.domains.extend(
+        x.domains
+    )
+
+    node.domains.extend(
+        y.domains
+    )
+
+    node.domains.append(
+        f"{y.origin} != 0"
+    )
+
+    node.domains = list(
+        set(node.domains)
+    )
+
     return node
 
 def power_eml(x, y):
@@ -181,6 +221,22 @@ def power_eml(x, y):
     node.label = "power"
 
     node.origin = f"({x.origin} ^ {y.origin})"
+
+    node.domains.extend(
+        x.domains
+    )
+
+    node.domains.extend(
+        y.domains
+    )
+
+    node.domains.append(
+        f"{x.origin} > 0"
+    )
+
+    node.domains = list(
+        set(node.domains)
+    )
 
     return node
 
@@ -199,6 +255,18 @@ def sqrt_eml(x):
     node.label = "sqrt"
 
     node.origin = f"sqrt({x.origin})"
+
+    node.domains.extend(
+        x.domains
+    )
+
+    node.domains.append(
+        f"{x.origin} >= 0"
+    )
+
+    node.domains = list(
+        set(node.domains)
+    )
 
     return node
 
@@ -306,6 +374,18 @@ def tanh_eml(x):
     node.label = "tanh"
 
     node.origin = f"tanh({x.origin})"
+
+    node.domains.extend(
+        x.domains
+    )
+
+    node.domains.append(
+        f"cos({x.origin}) != 0"
+    )
+
+    node.domains = list(
+        set(node.domains)
+    )
 
     return node
 
@@ -463,5 +543,21 @@ def arctanh_eml(x):
     node.label = "arctanh"
 
     node.origin = f"arctanh({x.origin})"
+
+    node.domains.extend(
+        x.domains
+    )
+
+    node.domains.append(
+        f"{x.origin} > -1"
+    )
+
+    node.domains.append(
+        f"{x.origin} < 1"
+    )
+
+    node.domains = list(
+        set(node.domains)
+)
 
     return node

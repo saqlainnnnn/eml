@@ -1,3 +1,4 @@
+#tree_view.py
 from rich.tree import Tree
 from rich import print
 
@@ -123,6 +124,19 @@ def build_label(node):
             f"[{value_style}]"
             f"{node.value}"
             f"[/{value_style}]"
+        )
+
+    # domains
+    if node.domains:
+
+        domain_text = " ∧ ".join(
+            node.domains
+        )
+
+        parts.append(
+            f"[bright_red]"
+            f"{truncate(domain_text, 60)}"
+            f"[/bright_red]"
         )
 
     # reconstructed expression

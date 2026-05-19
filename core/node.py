@@ -22,6 +22,10 @@ class Node:
 
     hash: Optional[str] = None
 
+    domains: list[str] = field(
+        default_factory=list
+    )
+
     def is_leaf(self):
         return self.value is not None
 
