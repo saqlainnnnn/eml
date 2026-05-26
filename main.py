@@ -1,12 +1,27 @@
-from lowering.arithmetic import *
-from visualize.tree_view import show
+from core.node import Node
+
+from core.serialize import to_json
 
 
-x = var("x")
-
-expr = divide_eml(
-    x,
-    x
+x = Node(
+    kind="leaf",
+    attrs={
+        "symbol": "x"
+    }
 )
 
-show(expr)
+y = Node(
+    kind="leaf",
+    attrs={
+        "symbol": "y"
+    }
+)
+
+expr = Node(
+    kind="merge",
+    inputs=[x, y]
+)
+
+print(
+    to_json(expr)
+)
